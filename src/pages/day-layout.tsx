@@ -23,9 +23,6 @@ export default function DayLayout() {
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <div>
-          <h2 className="text-2xl font-bold text-primary">
-            Movies
-          </h2>
           <ScrollArea className="h-[calc(100vh-200px)]">
             <ul className="flex flex-wrap gap-4 mt-4">
               {movies.map((movie) => (
@@ -52,7 +49,7 @@ export default function DayLayout() {
                           {movie.genre}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {movie.releaseYear}
+                          {movie.duration} min
                         </p>
                       </div>
                     </div>

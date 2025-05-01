@@ -68,3 +68,17 @@ export const getMovieById = (id: number, weekday?: string) => {
 
   return movie;
 }
+
+export const getMovieScreeningById = (movieId: number, screeningId: number) => {
+  const movie = getMovieById(movieId);
+  if (!movie) {
+    return null;
+  }
+
+  const screening = movie.screenings.find(screening => screening.id === screeningId);
+  if (!screening) {
+    return null;
+  }
+
+  return screening;
+}

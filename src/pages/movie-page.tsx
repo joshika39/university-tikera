@@ -22,11 +22,11 @@ export default function MoviePage() {
 
   return (
     <div className="flex flex-col gap-4 border rounded-lg w-full h-full p-4">
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row gap-4 h-72">
         <img
           src={`/images/${movie.image}`}
           alt={movie.title}
-          className="object-cover rounded-lg w-48 h-64"
+          className="object-cover rounded-lg w-48 h-64 -my-12 -rotate-2 shadow-lg"
         />
         <div className="flex flex-col gap-2 p-4">
           <h1 className="text-2xl font-semibold">
