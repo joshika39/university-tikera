@@ -1,10 +1,13 @@
 import {Booking} from "@/types.ts";
 import Seat from "@/components/seat.tsx";
+import {cn} from "@/lib/utils.ts";
 
 type SeatsProps = {
   rows: number;
   seatsPerRow: number;
   initBookings: Booking[];
+  className?: string;
+  onClick?: (row: number, seat: number) => void;
 }
 
 const convertBookings = (bookings: Booking[], rows: number, seatsPerRow: number): Booking[][] => {
@@ -15,11 +18,11 @@ const convertBookings = (bookings: Booking[], rows: number, seatsPerRow: number)
   return convertedBookings;
 }
 
-export default function Seats({rows, seatsPerRow, initBookings}: SeatsProps) {
+export default function Seats({rows, seatsPerRow, initBookings, className, onClick}: SeatsProps) {
   const bookings = convertBookings(initBookings, rows, seatsPerRow);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={cn("flex flex-col gap-2", className)}>
       {Array.from({length: rows}).map((_, row) => (
         <div key={row} className="flex flex-row gap-2">
           {Array.from({length: seatsPerRow}).map((_, seat) => (
@@ -28,6 +31,7 @@ export default function Seats({rows, seatsPerRow, initBookings}: SeatsProps) {
               row={row}
               seat={seat}
               booked={!!bookings[row][seat]}
+              onClick={onClick}
             />
           ))}
         </div>
