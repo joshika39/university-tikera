@@ -1,26 +1,24 @@
 import SeatIcon from "@/assets/seat.svg?react";
 import {cn} from "@/lib/utils.ts";
-import {ChangeEvent, useState} from "react";
 
 type SeatProps = {
   row: number;
   seat: number;
+  selected?: boolean;
   booked?: boolean;
   onClick?: (row: number, seat: number) => void;
 }
 
-export default function Seat({row, seat, booked, onClick}: SeatProps) {
-  const [checked, setChecked] = useState(false);
+export default function Seat({row, seat, selected, booked, onClick}: SeatProps) {
 
-  const _onChecked = (e: ChangeEvent<HTMLInputElement>) => {
-    setChecked(e.target.checked);
+  const _onChecked = () => {
     if (onClick) {
       onClick(row, seat);
     }
   }
 
   return (
-    <div>
+    <div className="w-8 h-8 flex items-center justify-center">
       <label
         className={cn(
           "text-primary hover:text-primary/80 cursor-pointer",
@@ -29,7 +27,7 @@ export default function Seat({row, seat, booked, onClick}: SeatProps) {
         )}
         htmlFor={`seat-${row}-${seat}`}
       >
-        <SeatIcon className="h-8"/>
+        <SeatIcon />
         <span className="sr-only">Available</span>
         <input
           type="checkbox"
@@ -37,7 +35,7 @@ export default function Seat({row, seat, booked, onClick}: SeatProps) {
           name={`seat-${row}-${seat}`}
           id={`seat-${row}-${seat}`}
           disabled={booked}
-          checked={checked}
+          checked={selected}
           onChange={_onChecked}
         />
       </label>
