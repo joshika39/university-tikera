@@ -1,6 +1,7 @@
 import data from '@/assets/movies.json';
 import {Booking, Movie, Screening} from '@/types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseBooking = (booking: any): Booking => {
   return {
     row: booking.row,
@@ -8,6 +9,7 @@ const parseBooking = (booking: any): Booking => {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseScreening = (screening: any): Screening => {
   return {
     id: screening.id,
@@ -21,7 +23,7 @@ const parseScreening = (screening: any): Screening => {
   }
 }
 
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseMovie = (movie: any): Movie => {
   return {
     id: movie.id,
@@ -51,4 +53,32 @@ export const getMoviesByDay = (day: string) => {
   return movies.filter(movie => {
     return movie.screenings.some(screening => screening.room.weekday.toLowerCase() === day);
   });
+}
+
+export const getMovieById = (id: number, weekday?: string) => {
+  const movies = getMovies();
+  const movie = movies.find(movie => movie.id === id);
+  if (!movie) {
+    return null;
+  }
+
+  if (weekday) {
+    movie.screenings = movie.screenings.filter(screening => screening.room.weekday.toLowerCase() === weekday);
+  }
+
+  return movie;
+}
+
+export const getMovieScreeningById = (movieId: number, screeningId: number) => {
+  const movie = getMovieById(movieId);
+  if (!movie) {
+    return null;
+  }
+
+  const screening = movie.screenings.find(screening => screening.id === screeningId);
+  if (!screening) {
+    return null;
+  }
+
+  return screening;
 }
