@@ -29,8 +29,9 @@ export default function DayLayout() {
                 <NavLink
                   to={`/${day}/${movie.id}`}
                   className={({isActive}) => cn(
-                    "p-4 bg-accent rounded-lg shadow-md border",
-                    isActive && "bg-primary/20 border-primary/60",
+                    "transition-all p-4 bg-accent rounded-lg shadow-md border",
+                    "hover:bg-accent/50 hover:border-accent/50",
+                    isActive && "bg-primary/20 border-primary/60 hover:border-primary/50 hover:bg-primary/30",
                   )}
                   key={movie.id}
                 >

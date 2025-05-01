@@ -18,9 +18,10 @@ export default function Seat({row, seat, selected, booked, onClick}: SeatProps) 
   }
 
   return (
-    <div className="w-8 h-8 flex items-center justify-center">
+    <div className="w-8 h-8 flex items-center justify-center transition-all">
       <label
         className={cn(
+          "transition-all",
           "text-primary hover:text-primary/80 cursor-pointer",
           "has-checked:text-foreground has-checked:hover:text-foreground/80",
           "has-disabled:cursor-not-allowed has-disabled:text-primary/50",
