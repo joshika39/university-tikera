@@ -21,14 +21,14 @@ export default function MoviePage() {
   }
 
   return (
-    <div className="flex flex-col gap-4 border rounded-lg w-full h-full p-4">
-      <div className="flex flex-row gap-4 h-72">
+    <div className="flex flex-col gap-4 md:gap-8 rounded-lg w-full h-full py-4 md:p-4">
+      <div className="flex flex-row gap-2">
         <img
           src={`/images/${movie.image}`}
           alt={movie.title}
-          className="object-cover rounded-lg w-48 h-64 -my-12 -rotate-2 shadow-lg"
+          className="object-cover rounded-lg w-36 md:w-48 h-52 md:h-64 shadow-lg"
         />
-        <div className="flex flex-col gap-2 p-4">
+        <div className="flex flex-col gap-2 p-4 pb-0">
           <h1 className="text-2xl font-semibold">
             {movie.title}
           </h1>
@@ -43,7 +43,7 @@ export default function MoviePage() {
           <p className="text-sm text-muted-foreground">
             {movie.description}
           </p>
-          <div className="flex flex-row gap-2 p-4">
+          <div className="flex flex-row flex-wrap gap-2 mt-auto">
             {movie.screenings.map((screening) => (
               <NavLink
                 to={`/${day}/${movie.id}/${screening.id}`}
@@ -56,9 +56,7 @@ export default function MoviePage() {
           </div>
         </div>
       </div>
-      <div className="text-2xl">
-        <Outlet/>
-      </div>
+      <Outlet/>
     </div>
   )
 }

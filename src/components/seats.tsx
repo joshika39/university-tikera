@@ -6,6 +6,7 @@ type SeatsProps = {
   rows: number;
   seatsPerRow: number;
   bookedSeats: Booking[];
+  disabled?: boolean;
   selected?: Booking[];
   setSelected?: (seats: Booking[]) => void;
   className?: string;
@@ -19,7 +20,7 @@ const convertBookings = (bookings: Booking[], rows: number, seatsPerRow: number)
   return convertedBookings;
 }
 
-export default function Seats({rows, seatsPerRow, bookedSeats, selected, setSelected, className}: SeatsProps) {
+export default function Seats({rows, seatsPerRow, bookedSeats, selected, disabled, setSelected, className}: SeatsProps) {
   const bookings = convertBookings(bookedSeats, rows, seatsPerRow);
 
   const _onClick = (row: number, seat: number) => {
@@ -37,13 +38,13 @@ export default function Seats({rows, seatsPerRow, bookedSeats, selected, setSele
 
 
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div className={cn("flex flex-col gap-2 items-center", className)}>
       <div className="flex flex-row gap-2">
         {Array.from({length: seatsPerRow + 1}).map((_, seat) => {
           if (seat === 0) {
-            return <div key={seat} className="text-sm w-8 text-center text-muted-foreground">Row</div>
+            return <div key={seat} className="text-sm w-6 sm:w-8 text-center text-muted-foreground">Row</div>
           }
-          return <div key={seat} className="text-sm w-8 text-center text-muted-foreground">
+          return <div key={seat} className="text-sm w-6 sm:w-8 text-center text-muted-foreground">
             {seat}
           </div>
         })}
@@ -54,7 +55,7 @@ export default function Seats({rows, seatsPerRow, bookedSeats, selected, setSele
             if (seat === 0) {
               return <div
                 key={seat}
-                className="text-sm w-8 text-center text-muted-foreground flex items-center justify-center"
+                className="text-sm w-6 sm:w-8 text-center text-muted-foreground flex items-center justify-center"
               >
                 {String.fromCharCode(65 + row)}
               </div>
@@ -62,6 +63,7 @@ export default function Seats({rows, seatsPerRow, bookedSeats, selected, setSele
             return <Seat
               key={seat}
               row={row}
+              disabled={disabled}
               seat={seat}
               selected={!!selected?.find((s) => s.row === row && s.seat === seat)}
               booked={!!bookings[row][seat]}

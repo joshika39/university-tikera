@@ -6,7 +6,7 @@ import TicketCountSelect from "@/components/ticket-count-select.tsx";
 import {useCallback, useEffect, useState} from "react";
 import {Booking} from "@/types.ts";
 import {Button} from "@/components/ui/button.tsx";
-import {cn} from "@/lib/utils.ts";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 
 type Params = {
   day?: string
@@ -46,14 +46,14 @@ export default function ScreeningPage() {
   }, [selectedSeats, studentTickets, adultTickets, seniorTickets]);
 
   if (!movieId || !day || !screeningId) {
-    return <div>Select a screening</div>
+    return <h2>Select a screening</h2>
   }
 
   const movie = getMovieById(parseInt(movieId), day);
   const screening = getMovieScreeningById(parseInt(movieId), parseInt(screeningId));
 
   if (!screening || !movie) {
-    return <div>Screening not found</div>
+    return <h2>Screening not found</h2>
   }
 
   const _onSeatSelect = (selected: Booking[]) => {
@@ -66,165 +66,115 @@ export default function ScreeningPage() {
 
   return (
     <div className="flex flex-col gap-4 transition-all">
-      <div className="flex flex-row gap-4 border rounded-lg w-full h-full p-4">
-        <div className="flex flex-col gap-4 flex-1">
-          <div className="flex flex-col gap-8">
-            <TicketCountSelect label="Student" price={2000} onChange={setStudentTickets}/>
-            <TicketCountSelect label="Adult" price={2500} onChange={setAdultTickets}/>
-            <TicketCountSelect label="Senior" price={1800} onChange={setSeniorTickets}/>
-          </div>
-          <Separator/>
-          <div className="flex flex-col gap-2">
-            {seatDiff > 0 && (
-              <p className="text-sm text-accent-foreground">
-                Select {seatDiff} more seats
-              </p>
-            )}
-          </div>
-        </div>
-        <Separator orientation="vertical" className="hidden md:block flex-none"/>
-        <Seats
-          className="flex-1"
-          rows={screening.room.rows}
-          seatsPerRow={screening.room.seatsPerRow}
-          bookedSeats={screening.room.bookings}
-          selected={selectedSeats}
-          setSelected={_onSeatSelect}
-        />
-      </div>
-      <div className={cn(
-        "transition-all invisible opacity-0",
-        successfulSelection() && "opacity-100 visible",
-        "flex flex-row gap-4 border rounded-lg w-full h-full p-4",
-      )}>
-        <div className="flex flex-col gap-4 flex-1">
-          <h3 className="text-2xl font-semibold">
-            {movie.title}
-          </h3>
-          <h4 className="text-lg font-semibold">
-            {screening.room.weekday} {screening.room.startTime}
-          </h4>
-          {studentTickets > 0 && (
-            <div className="flex flex-row gap-2 justify-between">
-              <p className="text-sm text-muted-foreground">
-                {studentTickets} x Student ticket
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {studentTickets * 2000} HUF
-              </p>
+      <Card className="bg-linear-to-bl from-card via-70% via-card to-primary/10">
+        <CardHeader>
+          <CardTitle>Tickets</CardTitle>
+          <CardDescription>
+            Select the number of tickets you want to purchase.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col md:flex-row gap-2">
+          <div className="flex flex-col gap-4 flex-1">
+            <div className="flex flex-col gap-8">
+              <TicketCountSelect label="Student" price={2000} onChange={setStudentTickets}/>
+              <TicketCountSelect label="Adult" price={2500} onChange={setAdultTickets}/>
+              <TicketCountSelect label="Senior" price={1800} onChange={setSeniorTickets}/>
             </div>
-          )}
-          {adultTickets > 0 && (
-            <div className="flex flex-row gap-2 justify-between">
-              <p className="text-sm text-muted-foreground">
-                {adultTickets} x Adult ticket
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {adultTickets * 2500} HUF
-              </p>
-            </div>
-          )}
-          {seniorTickets > 0 && (
-            <div className="flex flex-row gap-2 justify-between">
-              <p className="text-sm text-muted-foreground">
-                {seniorTickets} x Senior ticket
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {seniorTickets * 1800} HUF
-              </p>
-            </div>
-          )}
-          <p className="text-sm text-muted-foreground">
-            Total: {((studentTickets * 2000) + (adultTickets * 2500) + (seniorTickets * 1800)).toLocaleString("hu-HU", {
-            style: "currency",
-            currency: "HUF",
-          })}
-          </p>
-          <Separator/>
-          <div className="flex flex-row gap-2">
-            <p className="text-sm text-muted-foreground">
-              Selected seats:
-            </p>
-            {selectedSeats.map((seat) => (
-              <p key={`${seat.row}-${seat.seat}`} className="text-sm text-muted-foreground">
-                {String.fromCharCode(65 + seat.row)}{seat.seat + 1}
-              </p>
-            ))}
+            {studentTickets + adultTickets + seniorTickets > 0 && (<>
+              <Separator/>
+              <div className="flex flex-col gap-2">
+                {seatDiff > 0 && (
+                  <p className="text-sm text-accent-foreground">
+                    Select {seatDiff} more seats
+                  </p>
+                )}
+              </div>
+            </>)}
           </div>
-        </div>
-        <div className="flex flex-col gap-4 flex-1">
-          <Button
-            onClick={() => alert("Booking confirmed!")}
-          >
-            Confirm Booking
-          </Button>
-        </div>
-      </div>
+          <Seats
+            className="flex-1"
+            rows={screening.room.rows}
+            seatsPerRow={screening.room.seatsPerRow}
+            bookedSeats={screening.room.bookings}
+            selected={selectedSeats}
+            disabled={studentTickets + adultTickets + seniorTickets <= 0}
+            setSelected={_onSeatSelect}
+          />
+        </CardContent>
+      </Card>
       {successfulSelection() && (
-        <div className="flex flex-row gap-4 border rounded-lg w-full h-full p-4">
-          <div className="flex flex-col gap-4 flex-1">
-            <h3 className="text-2xl font-semibold">
-              {movie.title}
-            </h3>
-            <h4 className="text-lg font-semibold">
-              {screening.room.weekday} {screening.room.startTime}
-            </h4>
-            {studentTickets > 0 && (
-              <div className="flex flex-row gap-2 justify-between">
-                <p className="text-sm text-muted-foreground">
-                  {studentTickets} x Student ticket
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {studentTickets * 2000} HUF
-                </p>
-              </div>
-            )}
-            {adultTickets > 0 && (
-              <div className="flex flex-row gap-2 justify-between">
-                <p className="text-sm text-muted-foreground">
-                  {adultTickets} x Adult ticket
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {adultTickets * 2500} HUF
-                </p>
-              </div>
-            )}
-            {seniorTickets > 0 && (
-              <div className="flex flex-row gap-2 justify-between">
-                <p className="text-sm text-muted-foreground">
-                  {seniorTickets} x Senior ticket
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {seniorTickets * 1800} HUF
-                </p>
-              </div>
-            )}
-            <p className="text-sm text-muted-foreground">
-              Total: {((studentTickets * 2000) + (adultTickets * 2500) + (seniorTickets * 1800)).toLocaleString("hu-HU", {
-              style: "currency",
-              currency: "HUF",
-            })}
-            </p>
-            <Separator/>
-            <div className="flex flex-row gap-2">
+        <Card className="bg-linear-to-bl from-card via-50% via-card to-primary/10">
+          <CardHeader>
+            <CardTitle>Booking Summary</CardTitle>
+            <CardDescription>
+              Review your booking before confirming.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col gap-4">
+              <h3 className="text-2xl font-semibold">
+                {movie.title}
+              </h3>
+              <h4 className="text-lg font-semibold">
+                {screening.room.weekday} {screening.room.startTime}
+              </h4>
+              {studentTickets > 0 && (
+                <div className="flex flex-row gap-2 justify-between">
+                  <p className="text-sm text-muted-foreground">
+                    {studentTickets} x Student ticket
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {studentTickets * 2000} HUF
+                  </p>
+                </div>
+              )}
+              {adultTickets > 0 && (
+                <div className="flex flex-row gap-2 justify-between">
+                  <p className="text-sm text-muted-foreground">
+                    {adultTickets} x Adult ticket
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {adultTickets * 2500} HUF
+                  </p>
+                </div>
+              )}
+              {seniorTickets > 0 && (
+                <div className="flex flex-row gap-2 justify-between">
+                  <p className="text-sm text-muted-foreground">
+                    {seniorTickets} x Senior ticket
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {seniorTickets * 1800} HUF
+                  </p>
+                </div>
+              )}
               <p className="text-sm text-muted-foreground">
-                Selected seats:
+                Total: {((studentTickets * 2000) + (adultTickets * 2500) + (seniorTickets * 1800)).toLocaleString("hu-HU", {
+                style: "currency",
+                currency: "HUF",
+              })}
               </p>
-              {selectedSeats.map((seat) => (
-                <p key={`${seat.row}-${seat.seat}`} className="text-sm text-muted-foreground">
-                  {String.fromCharCode(65 + seat.row)}{seat.seat + 1}
+              <Separator/>
+              <div className="flex flex-row gap-2">
+                <p className="text-sm text-muted-foreground">
+                  Selected seats:
                 </p>
-              ))}
+                {selectedSeats.map((seat) => (
+                  <p key={`${seat.row}-${seat.seat}`} className="text-sm text-muted-foreground">
+                    {String.fromCharCode(65 + seat.row)}{seat.seat + 1}
+                  </p>
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-4 flex-1">
+          </CardContent>
+          <CardFooter>
             <Button
               onClick={() => alert("Booking confirmed!")}
             >
               Confirm Booking
             </Button>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       )}
     </div>
   )
