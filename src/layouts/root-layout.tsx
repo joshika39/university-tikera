@@ -1,11 +1,8 @@
-import {NavLink, Outlet, useNavigate} from "react-router";
+import {NavLink, Outlet} from "react-router";
 import {ThemeProvider} from "@/components/theme-provider.tsx";
 import {buttonVariants} from "@/components/ui/button.tsx";
 import Logo from "@/assets/ticket.svg?react";
 import {Toaster} from "@/components/ui/sonner.tsx";
-import useDraftBooking from "@/hooks/use-draft-booking.ts";
-import {toast} from "sonner";
-import {useEffect, useRef} from "react";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
