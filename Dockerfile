@@ -10,6 +10,9 @@ RUN pnpm install --frozen-lockfile
 FROM node:22-alpine AS build
 
 WORKDIR /app
+
+RUN npm install -g pnpm@latest
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 COPY --from=deps /app/package.json ./
