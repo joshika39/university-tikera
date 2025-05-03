@@ -2,15 +2,21 @@ FROM node:22-alpine AS deps
 
 WORKDIR /app
 
-COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
+COPY package.json pnpm-lock.yaml* ./
 
-RUN npm ci
+RUN npm install -g pnpm@latest
+RUN pnpm install --frozen-lockfile
+
 FROM node:22-alpine AS build
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+COPY --from=deps /app/package.json ./
+COPY --from=deps /app/pnpm-lock.yaml ./
+
+RUN pnpm build
+
 
 FROM nginx:stable-alpine AS runner
 
