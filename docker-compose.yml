@@ -2,7 +2,7 @@
 
 services:
   tikera:
-    image: joshika39/tikera
+    image: joshika39/university-tikera
     ports:
       - "80:80"
     labels:
