@@ -1,0 +1,18 @@
+# Don't forget to set HOSTNAME in .env file
+
+services:
+  tikera:
+    image: joshika39/tikera
+    ports:
+      - "80:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tikera.entrypoints=websecure"
+      - "traefik.http.routers.tikera.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.services.tikera.loadbalancer.server.port=80"
+    networks:
+      - cloudflaretunnel
+
+networks:
+  cloudflaretunnel:
+    external: true
