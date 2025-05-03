@@ -1,12 +1,14 @@
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import Seats from "@/components/seats.tsx";
 import {getMovieById, getMovieScreeningById} from "@/lib/resources.ts";
 import {Separator} from "@/components/ui/separator.tsx";
 import TicketCountSelect from "@/components/ticket-count-select.tsx";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {Booking} from "@/types.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import useDraftBooking, {DraftBooking} from "@/hooks/use-draft-booking.ts";
+import {toast} from "sonner";
 
 type Params = {
   day?: string
@@ -15,11 +17,15 @@ type Params = {
 }
 
 export default function ScreeningPage() {
+  const {removeDraftBooking, updateDraftBooking, draftBooking} = useDraftBooking();
+  const navigate = useNavigate();
   const [selectedSeats, setSelectedSeats] = useState<Booking[]>([]);
   const [studentTickets, setStudentTickets] = useState(0);
   const [adultTickets, setAdultTickets] = useState(0);
   const [seniorTickets, setSeniorTickets] = useState(0);
   const [seatDiff, setSeatDiff] = useState(0);
+
+  const isInitialRender = useRef(true);
 
   const {movie: movieId, day, screening: screeningId} = useParams<Params>();
 
@@ -29,6 +35,25 @@ export default function ScreeningPage() {
     setAdultTickets(0);
     setSeniorTickets(0);
   }, [movieId, day, screeningId]);
+
+  useEffect(() => {
+    if (!draftBooking) {
+      return;
+    }
+
+    if (!isInitialRender.current) {
+      return;
+    }
+
+    if (draftBooking) {
+      setStudentTickets(draftBooking.tickets.student);
+      setAdultTickets(draftBooking.tickets.adult);
+      setSeniorTickets(draftBooking.tickets.senior);
+      setSelectedSeats(draftBooking.selectedSeats);
+    }
+
+    isInitialRender.current = false;
+  }, [draftBooking]);
 
   useEffect(() => {
     const totalTickets = studentTickets + adultTickets + seniorTickets;
@@ -62,6 +87,20 @@ export default function ScreeningPage() {
     }
 
     setSelectedSeats(selected);
+
+    const draftBooking = {
+      day: day,
+      movieId: parseInt(movieId || "0"),
+      screeningId: parseInt(screeningId || "0"),
+      tickets: {
+        student: studentTickets,
+        adult: adultTickets,
+        senior: seniorTickets,
+      },
+      selectedSeats: selected,
+    } satisfies DraftBooking;
+
+    updateDraftBooking(draftBooking);
   }
 
   return (
@@ -76,9 +115,9 @@ export default function ScreeningPage() {
         <CardContent className="flex flex-col md:flex-row gap-2">
           <div className="flex flex-col gap-4 flex-1">
             <div className="flex flex-col gap-8">
-              <TicketCountSelect label="Student" price={2000} onChange={setStudentTickets}/>
-              <TicketCountSelect label="Adult" price={2500} onChange={setAdultTickets}/>
-              <TicketCountSelect label="Senior" price={1800} onChange={setSeniorTickets}/>
+              <TicketCountSelect label="Student" price={2000} value={studentTickets} onChange={setStudentTickets}/>
+              <TicketCountSelect label="Adult" price={2500} value={adultTickets} onChange={setAdultTickets}/>
+              <TicketCountSelect label="Senior" price={1800} value={seniorTickets} onChange={setSeniorTickets}/>
             </div>
             {studentTickets + adultTickets + seniorTickets > 0 && (<>
               <Separator/>
@@ -169,7 +208,18 @@ export default function ScreeningPage() {
           </CardContent>
           <CardFooter>
             <Button
-              onClick={() => alert("Booking confirmed!")}
+              onClick={() => {
+                removeDraftBooking();
+                toast.success("Booking confirmed!");
+                toast.success("An email was sent to you", {
+                  description: `See you at ${screening.room.weekday} ${screening.room.startTime} for ${movie.title}`,
+                })
+                setSelectedSeats([]);
+                setStudentTickets(0);
+                setAdultTickets(0);
+                setSeniorTickets(0);
+                navigate("/")
+              }}
             >
               Confirm Booking
             </Button>

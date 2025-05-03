@@ -1,28 +1,28 @@
-import {useState} from "react";
 import {Button} from "@/components/ui/button.tsx";
 
 type TicketCountSelectProps = {
   label: string;
   price: number;
+  value: number;
   onChange: (count: number) => void;
 }
 
-export default function TicketCountSelect({
-                                            label,
-                                            price,
-                                            onChange,
-                                          }: TicketCountSelectProps) {
-  const [count, setCount] = useState(0);
+export default function TicketCountSelect(
+  {
+    label,
+    price,
+    value,
+    onChange,
+  }
+  : TicketCountSelectProps) {
 
   const handleIncrement = () => {
-    setCount(count + 1);
-    onChange(count + 1);
+    onChange(value + 1);
   }
 
   const handleDecrement = () => {
-    if (count > 0) {
-      setCount(count - 1);
-      onChange(count - 1);
+    if (value > 0) {
+      onChange(value - 1);
     }
   }
 
@@ -44,7 +44,7 @@ export default function TicketCountSelect({
         >
           -
         </Button>
-        <span className="text-sm font-medium">{count}</span>
+        <span className="text-sm font-medium">{value}</span>
         <Button
           className="size-4 p-0 text-sm rounded"
           onClick={handleIncrement}

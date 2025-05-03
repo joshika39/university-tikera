@@ -23,6 +23,12 @@ const parseScreening = (screening: any): Screening => {
   }
 }
 
+const sortScreenings = (a: Screening, b: Screening) => {
+  const aDate = new Date(`2023-10-01T${a.room.startTime}`);
+  const bDate = new Date(`2023-10-01T${b.room.startTime}`);
+  return aDate.getTime() - bDate.getTime();
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseMovie = (movie: any): Movie => {
   return {
@@ -33,7 +39,7 @@ const parseMovie = (movie: any): Movie => {
     genre: movie.genre,
     duration: movie.duration,
     releaseYear: movie.release_year,
-    screenings: movie.screenings.map(parseScreening)
+    screenings: (movie.screenings.map(parseScreening)).sort(sortScreenings)
   }
 }
 

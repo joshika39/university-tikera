@@ -1,8 +1,11 @@
-import {NavLink, Outlet, useParams} from "react-router";
+import {NavLink, Outlet, useLocation, useNavigate, useParams} from "react-router";
 import {getMoviesByDay} from "@/lib/resources.ts";
 import {cn} from "@/lib/utils.ts";
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area.tsx";
 import {useIsMobile} from "@/hooks/use-mobile.ts";
+import useDraftBooking from "@/hooks/use-draft-booking.ts";
+import {useEffect, useRef} from "react";
+import {toast} from "sonner";
 
 type Params = {
   day: string;
@@ -10,7 +13,31 @@ type Params = {
 }
 
 export default function DayLayout() {
+  const {draftBooking} = useDraftBooking();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const isInitialRender = useRef(true);
   const {day, movie: movieId} = useParams<Params>();
+
+  useEffect(() => {
+    if (!draftBooking || pathname !== `/${day}`) {
+      return
+    }
+
+    if (!isInitialRender.current) {
+      return;
+    }
+
+    toast.info(`You have a draft booking, we only save it for 15 minutes.`, {
+      action: {
+        label: "Continue",
+        onClick: () => navigate(`/${draftBooking.day}/${draftBooking.movieId}/${draftBooking.screeningId}`),
+      }
+    });
+
+    isInitialRender.current = false;
+  }, [day, draftBooking, navigate, pathname]);
+
 
   const isMobile = useIsMobile();
 
