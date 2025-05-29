@@ -14,7 +14,7 @@ export const RootLayout = () => {
       <ThemeColorProvider/>
       <div
         className="flex flex-col gap-2 bg-gradient-to-br from-background via-background via-60% to-primary/20 md:to-primary/40 min-h-screen h-full w-fit">
-        <div className="md:absolute md:top-4 p-4 md:px-4 md:py-0 self-center flex flex-row gap-4 items-center justify-between w-auto">
+        <div className="md:absolute md:top-4 p-4 md:px-4 md:py-0 self-center flex flex-row gap-4 items-center justify-between w-full">
           <div className="flex flex-row gap-2 items-center">
             <Logo className="h-8 text-primary"/>
             <h1 className="text-3xl font-bold text-primary">
