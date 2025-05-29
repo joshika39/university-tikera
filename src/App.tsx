@@ -1,9 +1,9 @@
 import {Route, Routes} from "react-router";
-import {RootLayout} from "@/layouts/root-layout.tsx";
-import {RedirectToToday} from "@/components/redirect-to-today.tsx";
-import DayLayout from "@/pages/day-layout.tsx";
-import MoviePage from "@/pages/movie-page.tsx";
-import ScreeningPage from "@/pages/screening-page.tsx";
+import {RootLayout} from "@/layouts/root-layout";
+import {RedirectToToday} from "@/components/redirect-to-today";
+import DayLayout from "@/pages/day-layout";
+import MoviePage from "@/pages/movie-page";
+import ScreeningPage from "@/pages/screening-page";
 
 export default function App() {
   return (

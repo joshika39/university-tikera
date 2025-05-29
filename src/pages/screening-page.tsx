@@ -1,13 +1,13 @@
 import {useNavigate, useParams} from "react-router";
-import Seats from "@/components/seats.tsx";
-import {getMovieById, getMovieScreeningById} from "@/lib/resources.ts";
-import {Separator} from "@/components/ui/separator.tsx";
-import TicketCountSelect from "@/components/ticket-count-select.tsx";
+import Seats from "@/components/seats";
+import {getMovieById, getMovieScreeningById} from "@/lib/resources";
+import {Separator} from "@/components/ui/separator";
+import TicketCountSelect from "@/components/ticket-count-select";
 import {useCallback, useEffect, useRef, useState} from "react";
-import {Booking} from "@/types.ts";
-import {Button} from "@/components/ui/button.tsx";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import useDraftBooking, {DraftBooking} from "@/hooks/use-draft-booking.ts";
+import {Booking} from "@/types";
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import useDraftBooking, {DraftBooking} from "@/hooks/use-draft-booking";
 import {toast} from "sonner";
 
 type Params = {

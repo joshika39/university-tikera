@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Booking} from "@/types.ts";
+import {Booking} from "@/types";
 
 const KEY = "draftBooking";
 
