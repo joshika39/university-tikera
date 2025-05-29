@@ -1,5 +1,5 @@
 import SeatIcon from "@/assets/seat.svg?react";
-import {cn} from "@/lib/utils.ts";
+import {cn} from "@/lib/utils";
 
 type SeatProps = {
   row: number;

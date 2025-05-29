@@ -1,6 +1,6 @@
-import {Booking} from "@/types.ts";
-import Seat from "@/components/seat.tsx";
-import {cn} from "@/lib/utils.ts";
+import {Booking} from "@/types";
+import Seat from "@/components/seat";
+import {cn} from "@/lib/utils";
 
 type SeatsProps = {
   rows: number;

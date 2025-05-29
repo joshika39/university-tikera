@@ -1,9 +1,9 @@
 import {NavLink, Outlet} from "react-router";
-import {ThemeProvider} from "@/components/theme-provider.tsx";
-import {buttonVariants} from "@/components/ui/button.tsx";
+import {ThemeProvider} from "@/components/theme-provider";
+import {buttonVariants} from "@/components/ui/button";
 import Logo from "@/assets/ticket.svg?react";
-import {Toaster} from "@/components/ui/sonner.tsx";
-import {ThemeColorProvider} from "@/layouts/theme-color-provider.tsx";
+import {Toaster} from "@/components/ui/sonner";
+import {ThemeColorProvider} from "@/layouts/theme-color-provider";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 

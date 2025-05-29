@@ -1,6 +1,6 @@
 import {NavLink, Outlet, useParams} from "react-router";
-import {getMovieById} from "@/lib/resources.ts";
-import {badgeVariants} from "@/components/ui/badge.tsx";
+import {getMovieById} from "@/lib/resources";
+import {badgeVariants} from "@/components/ui/badge";
 
 type Params = {
   day?: string

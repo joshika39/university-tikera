@@ -1,9 +1,9 @@
 import {NavLink, Outlet, useLocation, useNavigate, useParams} from "react-router";
-import {getMoviesByDay} from "@/lib/resources.ts";
-import {cn} from "@/lib/utils.ts";
-import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area.tsx";
-import {useIsMobile} from "@/hooks/use-mobile.ts";
-import useDraftBooking from "@/hooks/use-draft-booking.ts";
+import {getMoviesByDay} from "@/lib/resources";
+import {cn} from "@/lib/utils";
+import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area";
+import {useIsMobile} from "@/hooks/use-mobile";
+import useDraftBooking from "@/hooks/use-draft-booking";
 import {useEffect, useRef} from "react";
 import {toast} from "sonner";
 
