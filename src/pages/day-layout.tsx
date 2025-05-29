@@ -1,43 +1,21 @@
-import {NavLink, Outlet, useLocation, useNavigate, useParams} from "react-router";
+import {NavLink, Outlet, useParams, useSearchParams} from "react-router";
 import {getMoviesByDay} from "@/lib/resources";
 import {cn} from "@/lib/utils";
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area";
 import {useIsMobile} from "@/hooks/use-mobile";
-import useDraftBooking from "@/hooks/use-draft-booking";
-import {useEffect, useRef} from "react";
-import {toast} from "sonner";
+import {useGetMoviesByWeekQuery} from "@/app/publicThunks";
+import {getWeek} from "date-fns";
 
 type Params = {
   day: string;
   movie?: string;
 }
 
+
 export default function DayLayout() {
-  const {draftBooking} = useDraftBooking();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const isInitialRender = useRef(true);
+  const [searchParams] = useSearchParams();
   const {day, movie: movieId} = useParams<Params>();
-
-  useEffect(() => {
-    if (!draftBooking || pathname !== `/${day}`) {
-      return
-    }
-
-    if (!isInitialRender.current) {
-      return;
-    }
-
-    toast.info(`You have a draft booking, we only save it for 15 minutes.`, {
-      action: {
-        label: "Continue",
-        onClick: () => navigate(`/${draftBooking.day}/${draftBooking.movieId}/${draftBooking.screeningId}`),
-      }
-    });
-
-    isInitialRender.current = false;
-  }, [day, draftBooking, navigate, pathname]);
-
+  const { data, isLoading, error } = useGetMoviesByWeekQuery(searchParams.get("week_number") || getWeek(new Date()).toString());
 
   const isMobile = useIsMobile();
 
@@ -45,7 +23,9 @@ export default function DayLayout() {
     return null;
   }
 
-  const movies = getMoviesByDay(day);
+  console.log(data);
+
+  const movies = getMoviesByDay(day, data || []);
 
   const moviesList = (
     <ScrollArea className="w-full md:h-[calc(100vh-200px)]">

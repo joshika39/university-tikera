@@ -5,6 +5,7 @@ import Logo from "@/assets/ticket.svg?react";
 import {Toaster} from "@/components/ui/sonner";
 import {ThemeColorProvider} from "@/layouts/theme-color-provider";
 import {ThemeChanger} from "@/components/theme-changer";
+import {PaginationContent, Pagination, PaginationItem, PaginationNext, PaginationLink, PaginationEllipsis, PaginationPrevious} from "@/components/ui/pagination";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -23,15 +24,33 @@ export const RootLayout = () => {
           </div>
           <ThemeChanger />
         </div>
-        <div className="flex flex-wrap flex-row gap-2 items-center self-center mt-4">
-          {days.map((day, index) => (
-            <NavLink
-              key={index} to={`/${day.toLowerCase()}`}
-              className={({isActive}) => buttonVariants({variant: isActive ? "default" : "link"})}
-            >
-              {day}
-            </NavLink>
-          ))}
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap flex-row gap-2 items-center self-center mt-4">
+            {days.map((day, index) => (
+              <NavLink
+                key={index} to={`/${day.toLowerCase()}`}
+                className={({isActive}) => buttonVariants({variant: isActive ? "default" : "link"})}
+              >
+                {day}
+              </NavLink>
+            ))}
+          </div>
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious href="#" />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">1</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext href="#" />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
         <div className="p-0 md:p-8">
           <Outlet/>

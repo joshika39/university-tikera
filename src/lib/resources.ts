@@ -54,9 +54,12 @@ export const getMovies = () => {
   return movies;
 }
 
-export const getMoviesByDay = (day: string) => {
-  const movies = getMovies();
+export const getMoviesByDay = (day: string, movies: Movie[]) => {
+  if (!day || !movies || movies.length === 0) {
+    return [];
+  }
   return movies.filter(movie => {
+    console.log(movie.screenings);
     return movie.screenings.some(screening => screening.room.weekday.toLowerCase() === day);
   });
 }
