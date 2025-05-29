@@ -3,8 +3,9 @@ import {getMoviesByDay} from "@/lib/resources";
 import {cn} from "@/lib/utils";
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area";
 import {useIsMobile} from "@/hooks/use-mobile";
-import {useGetMoviesByWeekQuery} from "@/app/publicThunks";
+import {useGetMoviesByWeekQuery} from "@/app/movieApi";
 import {getWeek} from "date-fns";
+import {LoaderCircle} from "lucide-react";
 
 type Params = {
   day: string;
@@ -15,15 +16,19 @@ type Params = {
 export default function DayLayout() {
   const [searchParams] = useSearchParams();
   const {day, movie: movieId} = useParams<Params>();
-  const { data, isLoading, error } = useGetMoviesByWeekQuery(searchParams.get("week_number") || getWeek(new Date()).toString());
+  const { data, isLoading } = useGetMoviesByWeekQuery(searchParams.get("week_number") || getWeek(new Date()).toString());
 
   const isMobile = useIsMobile();
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center w-full">
+      <LoaderCircle className="animate-spin size-8" />
+    </div>
+  }
 
   if (!day) {
     return null;
   }
-
-  console.log(data);
 
   const movies = getMoviesByDay(day, data || []);
 
@@ -42,7 +47,7 @@ export default function DayLayout() {
           >
             <li key={movie.id} className="flex flex-col gap-2 w-36 md:w-48">
               <img
-                src={`/images/${movie.image}`}
+                src={movie.image}
                 alt={movie.title}
                 className="object-cover rounded-lg w-full h-52 md:h-64 shadow-lg"
               />

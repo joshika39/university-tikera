@@ -1,5 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit';
-import {movieApi} from "@/app/publicThunks";
+import {movieApi} from "@/app/movieApi";
 
 export const store = configureStore({
   reducer: {
