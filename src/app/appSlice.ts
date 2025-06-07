@@ -3,10 +3,12 @@ import {getWeek} from "date-fns";
 
 type AppSlice = {
   currentWeek: string;
+  token: string | null;
 }
 
 const initialState: AppSlice = {
   currentWeek: getWeek(new Date()).toString(),
+  token: null,
 };
 
 const appSlice = createSlice({
