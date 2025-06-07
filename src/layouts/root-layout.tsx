@@ -7,11 +7,15 @@ import {ThemeColorProvider} from "@/layouts/theme-color-provider";
 import {ThemeChanger} from "@/components/theme-changer";
 import {PaginationContent, Pagination, PaginationItem, PaginationNext, PaginationLink, PaginationPrevious} from "@/components/ui/pagination";
 import {Suspense} from "react";
-import {getWeek} from "date-fns";
+import {useAppDispatch, useAppSelector} from "@/app/hooks";
+import {nextWeek, previousWeek} from "@/app/appSlice";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export const RootLayout = () => {
+  const { currentWeek } = useAppSelector((state) => state.app);
+  const dispatch = useAppDispatch();
+
   return (
     <ThemeProvider attribute="class" enableSystem defaultTheme="system" disableTransitionOnChange>
       <ThemeColorProvider/>
@@ -26,8 +30,8 @@ export const RootLayout = () => {
           </div>
           <ThemeChanger />
         </div>
-        <div className="flex flex-col gap-2 z-20">
-          <div className="flex flex-wrap flex-row gap-2 items-center self-center mt-4">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-wrap flex-row gap-2 items-center self-center mt-4 z-10">
             {days.map((day, index) => (
               <NavLink
                 key={index} to={`/${day.toLowerCase()}`}
@@ -40,13 +44,13 @@ export const RootLayout = () => {
           <Pagination>
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious />
+                <PaginationPrevious onClick={() => dispatch(previousWeek())}/>
               </PaginationItem>
               <PaginationItem>
-                <PaginationLink>{getWeek(new Date()).toString()}</PaginationLink>
+                <PaginationLink>{currentWeek}</PaginationLink>
               </PaginationItem>
               <PaginationItem>
-                <PaginationNext />
+                <PaginationNext onClick={() => dispatch(nextWeek())}/>
               </PaginationItem>
             </PaginationContent>
           </Pagination>

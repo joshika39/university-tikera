@@ -1,11 +1,11 @@
-import {NavLink, Outlet, useParams, useSearchParams} from "react-router";
+import {NavLink, Outlet, useParams} from "react-router";
 import {getMoviesByDay} from "@/lib/resources";
 import {cn} from "@/lib/utils";
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area";
 import {useIsMobile} from "@/hooks/use-mobile";
 import {useGetMoviesByWeekQuery} from "@/app/movieApi";
-import {getWeek} from "date-fns";
 import {LoaderCircle} from "lucide-react";
+import {useAppSelector} from "@/app/hooks";
 
 type Params = {
   day: string;
@@ -14,9 +14,10 @@ type Params = {
 
 
 export default function DayLayout() {
-  const [searchParams] = useSearchParams();
+  const { currentWeek } = useAppSelector(state => state.app);
+
   const {day, movie: movieId} = useParams<Params>();
-  const { data, isLoading } = useGetMoviesByWeekQuery(searchParams.get("week_number") || getWeek(new Date()).toString());
+  const { data, isLoading } = useGetMoviesByWeekQuery(currentWeek);
 
   const isMobile = useIsMobile();
 
