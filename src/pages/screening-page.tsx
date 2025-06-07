@@ -1,14 +1,14 @@
-import {useNavigate, useParams} from "react-router";
+import {useParams} from "react-router";
 import Seats from "@/components/seats";
-import {getMovieById, getMovieScreeningById} from "@/lib/resources";
 import {Separator} from "@/components/ui/separator";
 import TicketCountSelect from "@/components/ticket-count-select";
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {Booking} from "@/types";
 import {Button} from "@/components/ui/button";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
-import useDraftBooking, {DraftBooking} from "@/hooks/use-draft-booking";
 import {toast} from "sonner";
+import {useGetMovieByIdQuery} from "@/app/movieApi";
+import {LoaderCircle} from "lucide-react";
 
 type Params = {
   day?: string
@@ -17,43 +17,20 @@ type Params = {
 }
 
 export default function ScreeningPage() {
-  const {removeDraftBooking, updateDraftBooking, draftBooking} = useDraftBooking();
-  const navigate = useNavigate();
   const [selectedSeats, setSelectedSeats] = useState<Booking[]>([]);
   const [studentTickets, setStudentTickets] = useState(0);
   const [adultTickets, setAdultTickets] = useState(0);
   const [seniorTickets, setSeniorTickets] = useState(0);
   const [seatDiff, setSeatDiff] = useState(0);
 
-  const isInitialRender = useRef(true);
-
-  const {movie: movieId, day, screening: screeningId} = useParams<Params>();
+  const {screening: screeningId, movie: movieId} = useParams<Params>();
 
   useEffect(() => {
     setSelectedSeats([]);
     setStudentTickets(0);
     setAdultTickets(0);
     setSeniorTickets(0);
-  }, [movieId, day, screeningId]);
-
-  useEffect(() => {
-    if (!draftBooking) {
-      return;
-    }
-
-    if (!isInitialRender.current) {
-      return;
-    }
-
-    if (draftBooking) {
-      setStudentTickets(draftBooking.tickets.student);
-      setAdultTickets(draftBooking.tickets.adult);
-      setSeniorTickets(draftBooking.tickets.senior);
-      setSelectedSeats(draftBooking.selectedSeats);
-    }
-
-    isInitialRender.current = false;
-  }, [draftBooking]);
+  }, [screeningId]);
 
   useEffect(() => {
     const totalTickets = studentTickets + adultTickets + seniorTickets;
@@ -70,14 +47,13 @@ export default function ScreeningPage() {
     return selectedSeats.length === (studentTickets + adultTickets + seniorTickets) && selectedSeats.length > 0;
   }, [selectedSeats, studentTickets, adultTickets, seniorTickets]);
 
-  if (!movieId || !day || !screeningId) {
-    return <h2>Select a screening</h2>
-  }
+  const {data: movie, isLoading} = useGetMovieByIdQuery(movieId || "", {
+    skip: !movieId,
+  });
 
-  const movie = getMovieById(parseInt(movieId), day);
-  const screening = getMovieScreeningById(parseInt(movieId), parseInt(screeningId));
+  const screening = movie?.screenings?.filter((s) => s.id.toString() === screeningId)?.[0];
 
-  if (!screening || !movie) {
+  if (!screening) {
     return <h2>Screening not found</h2>
   }
 
@@ -87,20 +63,12 @@ export default function ScreeningPage() {
     }
 
     setSelectedSeats(selected);
+  }
 
-    const draftBooking = {
-      day: day,
-      movieId: parseInt(movieId || "0"),
-      screeningId: parseInt(screeningId || "0"),
-      tickets: {
-        student: studentTickets,
-        adult: adultTickets,
-        senior: seniorTickets,
-      },
-      selectedSeats: selected,
-    } satisfies DraftBooking;
-
-    updateDraftBooking(draftBooking);
+  if (isLoading) {
+    return <div className="flex items-center justify-center w-full">
+      <LoaderCircle className="animate-spin size-8"/>
+    </div>
   }
 
   return (
@@ -209,7 +177,6 @@ export default function ScreeningPage() {
           <CardFooter>
             <Button
               onClick={() => {
-                removeDraftBooking();
                 toast.success("Booking confirmed!");
                 toast.success("An email was sent to you", {
                   description: `See you at ${screening.room.weekday} ${screening.room.startTime} for ${movie.title}`,
@@ -218,7 +185,6 @@ export default function ScreeningPage() {
                 setStudentTickets(0);
                 setAdultTickets(0);
                 setSeniorTickets(0);
-                navigate("/")
               }}
             >
               Confirm Booking

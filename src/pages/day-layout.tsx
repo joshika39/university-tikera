@@ -1,51 +1,37 @@
-import {NavLink, Outlet, useLocation, useNavigate, useParams} from "react-router";
+import {NavLink, Outlet, useParams} from "react-router";
 import {getMoviesByDay} from "@/lib/resources";
 import {cn} from "@/lib/utils";
 import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area";
 import {useIsMobile} from "@/hooks/use-mobile";
-import useDraftBooking from "@/hooks/use-draft-booking";
-import {useEffect, useRef} from "react";
-import {toast} from "sonner";
+import {useGetMoviesByWeekQuery} from "@/app/movieApi";
+import {LoaderCircle} from "lucide-react";
+import {useAppSelector} from "@/app/hooks";
 
 type Params = {
   day: string;
   movie?: string;
 }
 
+
 export default function DayLayout() {
-  const {draftBooking} = useDraftBooking();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const isInitialRender = useRef(true);
+  const { currentWeek } = useAppSelector(state => state.app);
+
   const {day, movie: movieId} = useParams<Params>();
-
-  useEffect(() => {
-    if (!draftBooking || pathname !== `/${day}`) {
-      return
-    }
-
-    if (!isInitialRender.current) {
-      return;
-    }
-
-    toast.info(`You have a draft booking, we only save it for 15 minutes.`, {
-      action: {
-        label: "Continue",
-        onClick: () => navigate(`/${draftBooking.day}/${draftBooking.movieId}/${draftBooking.screeningId}`),
-      }
-    });
-
-    isInitialRender.current = false;
-  }, [day, draftBooking, navigate, pathname]);
-
+  const { data, isLoading } = useGetMoviesByWeekQuery(currentWeek);
 
   const isMobile = useIsMobile();
+
+  if (isLoading) {
+    return <div className="flex items-center justify-center w-full">
+      <LoaderCircle className="animate-spin size-8" />
+    </div>
+  }
 
   if (!day) {
     return null;
   }
 
-  const movies = getMoviesByDay(day);
+  const movies = getMoviesByDay(day, data || []);
 
   const moviesList = (
     <ScrollArea className="w-full md:h-[calc(100vh-200px)]">
@@ -62,7 +48,7 @@ export default function DayLayout() {
           >
             <li key={movie.id} className="flex flex-col gap-2 w-36 md:w-48">
               <img
-                src={`/images/${movie.image}`}
+                src={movie.image}
                 alt={movie.title}
                 className="object-cover rounded-lg w-full h-52 md:h-64 shadow-lg"
               />

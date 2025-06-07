@@ -1,6 +1,7 @@
 import {NavLink, Outlet, useParams} from "react-router";
-import {getMovieById} from "@/lib/resources";
 import {badgeVariants} from "@/components/ui/badge";
+import {useGetMovieByIdQuery} from "@/app/movieApi";
+import {LoaderCircle} from "lucide-react";
 
 type Params = {
   day?: string
@@ -10,11 +11,15 @@ type Params = {
 export default function MoviePage() {
   const {movie: movieId, day} = useParams<Params>();
 
-  if (!movieId) {
-    return <div>Select a screening</div>
-  }
+  const {data: movie, isLoading} = useGetMovieByIdQuery(movieId || "", {
+    skip: !movieId,
+  });
 
-  const movie = getMovieById(parseInt(movieId), day);
+  if (isLoading) {
+    return <div className="flex items-center justify-center w-full">
+      <LoaderCircle className="animate-spin size-8"/>
+    </div>
+  }
 
   if (!movie) {
     return <div>Movie not found</div>
@@ -24,7 +29,7 @@ export default function MoviePage() {
     <div className="flex flex-col gap-4 md:gap-8 rounded-lg w-full h-full py-4 md:p-4">
       <div className="flex flex-row gap-2">
         <img
-          src={`/images/${movie.image}`}
+          src={movie.image}
           alt={movie.title}
           className="object-cover rounded-lg w-36 md:w-48 h-52 md:h-64 shadow-lg"
         />
