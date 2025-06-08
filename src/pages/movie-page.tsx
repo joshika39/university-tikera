@@ -1,16 +1,32 @@
 import {NavLink, Outlet, useParams} from "react-router";
 import {badgeVariants} from "@/components/ui/badge";
-import {useGetMovieByIdQuery} from "@/app/movieApi";
+import {useGetMovieByIdQuery, useGetMoviesByWeekQuery} from "@/app/movieApi";
 import {LoaderCircle} from "lucide-react";
 import {useAppSelector} from "@/app/hooks";
+import {EditMovieDialog} from "@/components/forms/EditMovieDialog";
+import {Movie} from "@/types";
+import {useAuth} from "@/hooks/use-auth";
 
 type Params = {
   day?: string
   movie?: string
 }
 
+const getPayload = (movie: Movie) => {
+  return {
+    id: movie.id,
+    title: movie.title,
+    description: movie.description,
+    image_path: movie.image,
+    genre: movie.genre,
+    duration: movie.duration,
+    release_year: movie.releaseYear,
+  }
+}
+
 export default function MoviePage() {
-  const { currentWeek } = useAppSelector(state => state.app)
+  const {isAdmin} = useAuth();
+  const {currentWeek} = useAppSelector(state => state.app)
   const {movie: movieId, day} = useParams<Params>();
 
   const payload = {
@@ -18,9 +34,12 @@ export default function MoviePage() {
     week: currentWeek,
     day: day || "",
   }
-  const {data: movie, isLoading} = useGetMovieByIdQuery(payload, {
+
+  const {data: movie, isLoading, refetch} = useGetMovieByIdQuery(payload, {
     skip: !movieId,
   });
+
+  const {refetch: refetchAll} = useGetMoviesByWeekQuery(currentWeek);
 
   if (isLoading) {
     return <div className="flex items-center justify-center w-full">
@@ -28,12 +47,24 @@ export default function MoviePage() {
     </div>
   }
 
-  if (!movie) {
+  if(!movieId) {
+    return <div>
+      Select a movie from the list to view details.
+    </div>
+  }
+
+  if (!movie || !movieId) {
     return <div>Movie not found</div>
+  }
+
+  const _refetch = () => {
+    refetch();
+    refetchAll();
   }
 
   return (
     <div className="flex flex-col gap-4 md:gap-8 rounded-lg w-full h-full py-4 md:p-4">
+      {isAdmin && <EditMovieDialog movie={getPayload(movie)} onClose={_refetch}/>}
       <div className="flex flex-row gap-2">
         <img
           src={movie.image}

@@ -19,7 +19,8 @@ type MovieFormProps = {
     duration: number;
     release_year: number;
     image_path: string;
-  }
+  };
+  onClose?: () => void;
 }
 
 const movieForm = z.object({
@@ -33,7 +34,7 @@ const movieForm = z.object({
 
 type MovieFormValues = z.infer<typeof movieForm>;
 
-export function MovieForm({movie}: MovieFormProps) {
+export function MovieForm({movie, onClose}: MovieFormProps) {
   const [createMovie, {isLoading: isCreating}] = useCreateMovieMutation();
   const [updateMovie, {isLoading: isUpdating}] = useUpdateMovieMutation();
   const isEditing = !!movie;
@@ -62,6 +63,7 @@ export function MovieForm({movie}: MovieFormProps) {
         toast.success(`Movie (${resp.data.id}) created successfully!`);
       }
       form.reset();
+      onClose?.();
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error(`Failed to ${isEditing ? "update" : "create"} movie. Please try again.`);

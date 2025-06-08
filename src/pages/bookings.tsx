@@ -1,8 +1,17 @@
 import {useGetBookingsQuery} from "@/app/userApi";
 import {Booking} from "@/components/booking";
+import {useAuth} from "@/hooks/use-auth";
 
 export function BookingsPage() {
-  const {data, isLoading} = useGetBookingsQuery();
+  const {isAdmin} = useAuth();
+
+  const {data, isLoading} = useGetBookingsQuery(undefined, {
+    skip: isAdmin,
+  });
+
+  if (isAdmin) {
+    return <div className="text-center text-primary">Bookings are not available for admins.</div>;
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
