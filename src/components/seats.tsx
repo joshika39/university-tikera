@@ -15,7 +15,7 @@ type SeatsProps = {
 const convertBookings = (bookings: Booking[], rows: number, seatsPerRow: number): Booking[][] => {
   const convertedBookings: Booking[][] = Array.from({length: rows}, () => Array(seatsPerRow).fill(null));
   bookings.forEach(booking => {
-    convertedBookings[booking.row - 1][booking.seat - 1] = booking;
+    convertedBookings[booking.row - 1][booking.seat] = booking;
   });
   return convertedBookings;
 }

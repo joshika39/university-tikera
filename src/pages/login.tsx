@@ -11,6 +11,7 @@ import {useLoginMutation} from "@/app/authApi";
 import {toast} from "sonner";
 import {setUser} from "@/app/appSlice";
 import {useAppDispatch} from "@/app/hooks";
+import {useAuth} from "@/hooks/use-auth";
 
 const loginForm = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
@@ -20,6 +21,7 @@ const loginForm = z.object({
 type LoginForm = z.infer<typeof loginForm>;
 
 export function LoginPage() {
+  useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [login, {isLoading}] = useLoginMutation();

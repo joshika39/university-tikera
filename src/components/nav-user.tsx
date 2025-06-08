@@ -1,7 +1,6 @@
 import {
-  Bell,
-  ChevronsUpDown,
-  LogOut,
+  ChevronsUpDown, House,
+  LogOut, Ticket,
 } from "lucide-react"
 import {
   Avatar,
@@ -91,8 +90,14 @@ export function NavUser({user}: NavUserProps) {
         <DropdownMenuSeparator/>
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
+            <Link to="/">
+              <House />
+              Movies
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
             <Link to="/bookings">
-              <Bell/>
+              <Ticket />
               Bookings
             </Link>
           </DropdownMenuItem>
