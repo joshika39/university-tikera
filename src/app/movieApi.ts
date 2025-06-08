@@ -24,8 +24,24 @@ const parseMovie = (movie: MovieResponse): Movie => ({
   genre: movie.genre,
   duration: movie.duration,
   releaseYear: movie.release_year,
-  screenings: movie.screenings.map(parseScreening)
+  screenings: movie.screenings.map(parseScreening).sort((s1, s2) => {
+    const toMinutes = (time: string) => {
+      const [hours, minutes] = time.split(":").map(Number);
+      return hours * 60 + minutes;
+    };
+    return toMinutes(s1.room.startTime) - toMinutes(s2.room.startTime);
+  }),
 });
+
+const dayMap: Record<string, number> = {
+  "sunday": 7,
+  "monday": 1,
+  "tuesday": 2,
+  "wednesday": 3,
+  "thursday": 4,
+  "friday": 5,
+  "saturday": 6,
+}
 
 export const movieApi = createApi({
   reducerPath: 'movieApi',
@@ -43,7 +59,7 @@ export const movieApi = createApi({
         return response.data.map(parseMovie);
       }
     }),
-    getMovieById: build.query<Movie | undefined, {id: string, week: string}>({
+    getMovieById: build.query<Movie | undefined, {id: string, week: string, day: string}>({
       query: ({id}) => `movies/${id}`,
       transformResponse: (response: ApiResponse<MovieResponse>, _, arg): Movie | undefined => {
         if (response.status !== 'success') {
@@ -53,7 +69,10 @@ export const movieApi = createApi({
         const movie = response.data;
 
         movie.screenings = movie.screenings.filter(
-          (screening) => screening.week_number === parseInt(arg.week)
+          (screening) => (
+            screening.week_number === parseInt(arg.week) &&
+              screening.week_day === dayMap[arg.day]
+          )
         );
 
         return parseMovie(movie);

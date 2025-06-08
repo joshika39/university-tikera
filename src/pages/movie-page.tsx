@@ -13,7 +13,12 @@ export default function MoviePage() {
   const { currentWeek } = useAppSelector(state => state.app)
   const {movie: movieId, day} = useParams<Params>();
 
-  const {data: movie, isLoading} = useGetMovieByIdQuery({id: movieId || "", week: currentWeek}, {
+  const payload = {
+    id: movieId || "",
+    week: currentWeek,
+    day: day || "",
+  }
+  const {data: movie, isLoading} = useGetMovieByIdQuery(payload, {
     skip: !movieId,
   });
 

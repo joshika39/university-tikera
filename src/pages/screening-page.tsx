@@ -31,7 +31,7 @@ export default function ScreeningPage() {
   const [createBooking, {isLoading}] = useCreateBookingMutation();
   const { refetch: bookingRefetch } = useGetBookingsQuery();
 
-  const {screening: screeningId, movie: movieId} = useParams<Params>();
+  const {screening: screeningId, movie: movieId, day} = useParams<Params>();
 
   useEffect(() => {
     setSelectedSeats([]);
@@ -54,8 +54,12 @@ export default function ScreeningPage() {
   const successfulSelection = useCallback(() => {
     return selectedSeats.length === (studentTickets + adultTickets + seniorTickets) && selectedSeats.length > 0;
   }, [selectedSeats, studentTickets, adultTickets, seniorTickets]);
-
-  const {data: movie, isLoading: isMovieLoading, refetch} = useGetMovieByIdQuery({id: movieId || "", week: currentWeek}, {
+  const payload = {
+    id: movieId || "",
+    week: currentWeek,
+    day: day || "",
+  }
+  const {data: movie, isLoading: isMovieLoading, refetch} = useGetMovieByIdQuery(payload, {
     skip: !movieId,
   });
 

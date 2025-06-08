@@ -26,7 +26,7 @@ export function Booking({booking}: BookingProps) {
     <Card>
       <CardHeader>
         <CardTitle>{booking.screening.movie.title}</CardTitle>
-        <CardDescription>Starts: {new Date(booking.screening.start_time).toLocaleString("ja-JP")}</CardDescription>
+        <CardDescription>Starts: {new Date(booking.screening.start_time).toLocaleString()}</CardDescription>
       </CardHeader>
       <CardContent className="px-0">
         <img src={booking.screening.movie.image_path} alt="Photo by Yu Kato"
