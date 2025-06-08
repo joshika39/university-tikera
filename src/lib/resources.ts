@@ -5,7 +5,6 @@ export const getMoviesByDay = (day: string, movies: Movie[]) => {
     return [];
   }
   return movies.filter(movie => {
-    console.log(movie.screenings);
     return movie.screenings.some(screening => screening.room.weekday.toLowerCase() === day);
   });
 }
