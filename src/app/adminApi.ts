@@ -29,9 +29,10 @@ export const adminApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_URL,
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
+      const user = localStorage.getItem('user');
+      if (user) {
+        const parsedUser = JSON.parse(user);
+        headers.set('Authorization', `Bearer ${parsedUser.token}`);
       }
       headers.set('Content-Type', 'application/json');
       return headers;

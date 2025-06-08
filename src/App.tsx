@@ -7,6 +7,7 @@ import ScreeningPage from "@/pages/screening-page";
 import {LoginPage} from "@/pages/login";
 import {RegisterPage} from "@/pages/registration";
 import {Providers} from "@/layouts/providers";
+import {BookingsPage} from "@/pages/bookings";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="register" element={<RegisterPage/>}/>
         <Route element={<RootLayout/>}>
           <Route index element={<RedirectToToday/>}/>
+          <Route path="/bookings" element={<BookingsPage />} />
           <Route path=":day" element={<DayLayout/>}>
             <Route path=":movie?" element={<MoviePage/>}>
               <Route path=":screening?" element={<ScreeningPage/>}/>

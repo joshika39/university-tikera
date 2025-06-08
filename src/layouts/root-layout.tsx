@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/pagination";
 import {Suspense} from "react";
 import {useAppDispatch, useAppSelector} from "@/app/hooks";
-import {nextWeek, previousWeek, setUser} from "@/app/appSlice";
+import {nextWeek, previousWeek} from "@/app/appSlice";
 import {useAuth} from "@/hooks/use-auth";
 import {addDays, isBefore, setISOWeek, startOfDay, startOfISOWeek} from "date-fns";
 import {NavUser} from "@/components/nav-user";
@@ -76,10 +76,12 @@ export const RootLayout = () => {
       <div
         className="md:absolute md:top-4 p-4 md:px-4 md:py-0 self-center flex flex-col md:flex-row gap-4 items-center justify-between w-full">
         <div className="flex flex-row gap-2 items-center">
-          <Logo className="h-8 text-primary"/>
-          <h1 className="text-3xl font-bold text-primary">
-            Tikera
-          </h1>
+          <Link to="/" className="flex flex-row gap-2 items-center justify-between">
+            <Logo className="h-8 text-primary"/>
+            <h1 className="text-3xl font-bold text-primary">
+              Tikera
+            </h1>
+          </Link>
         </div>
         <div className="flex flex-row gap-2 items-center">
           {authButtons}

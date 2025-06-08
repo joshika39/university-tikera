@@ -40,19 +40,23 @@ export const movieApi = createApi({
         if (response.status !== 'success') {
           throw new Error(response.message)
         }
-
         return response.data.map(parseMovie);
       }
     }),
-    getMovieById: build.query<Movie | undefined, string>({
-      query: (id) => `movies/${id}`,
-      transformResponse: (response: ApiResponse<MovieResponse>): Movie | undefined => {
+    getMovieById: build.query<Movie | undefined, {id: string, week: string}>({
+      query: ({id}) => `movies/${id}`,
+      transformResponse: (response: ApiResponse<MovieResponse>, _, arg): Movie | undefined => {
         if (response.status !== 'success') {
           throw new Error(response.message)
         }
 
         const movie = response.data;
-        return movie ? parseMovie(movie) : undefined;
+
+        movie.screenings = movie.screenings.filter(
+          (screening) => screening.week_number === parseInt(arg.week)
+        );
+
+        return parseMovie(movie);
       }
     }),
     getScreeningById: build.query<Screening | undefined, string>({

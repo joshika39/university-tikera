@@ -2,6 +2,7 @@ import {NavLink, Outlet, useParams} from "react-router";
 import {badgeVariants} from "@/components/ui/badge";
 import {useGetMovieByIdQuery} from "@/app/movieApi";
 import {LoaderCircle} from "lucide-react";
+import {useAppSelector} from "@/app/hooks";
 
 type Params = {
   day?: string
@@ -9,9 +10,10 @@ type Params = {
 }
 
 export default function MoviePage() {
+  const { currentWeek } = useAppSelector(state => state.app)
   const {movie: movieId, day} = useParams<Params>();
 
-  const {data: movie, isLoading} = useGetMovieByIdQuery(movieId || "", {
+  const {data: movie, isLoading} = useGetMovieByIdQuery({id: movieId || "", week: currentWeek}, {
     skip: !movieId,
   });
 

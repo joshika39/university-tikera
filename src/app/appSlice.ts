@@ -8,7 +8,7 @@ type AppSlice = {
 }
 
 const initialState: AppSlice = {
-  currentWeek: getWeek(new Date(), {weekStartsOn: 1}).toString(),
+  currentWeek: getWeek(new Date()).toString(),
   user: null,
 };
 
