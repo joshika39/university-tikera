@@ -21,8 +21,18 @@ export type Screening = {
   bookings: Booking[];
 };
 
+type ScreeningMutation = {
+  id: number;
+  movie_id: number;
+  room_id: number;
+  start_time: string;
+  date: string;
+}
+
 type CreateMoviePayload = Omit<Movie, 'id'>;
 type UpdateMoviePayload = Partial<CreateMoviePayload> & { id: number };
+
+type CreateScreeningPayload = Omit<ScreeningMutation, 'id'>;
 
 export const adminApi = createApi({
   reducerPath: 'adminApi',
@@ -59,18 +69,23 @@ export const adminApi = createApi({
         method: 'DELETE',
       }),
     }),
-    createScreening: build.mutation<ApiResponse<Screening>, FormData>({
+    createScreening: build.mutation<ApiResponse<Screening>, CreateScreeningPayload>({
       query: (formData) => ({
         url: 'screenings',
         method: 'POST',
         body: formData,
       }),
     }),
-    updateScreening: build.mutation<ApiResponse<Screening>, { id: number; formData: FormData }>({
-      query: ({ id, formData }) => ({
+    updateScreening: build.mutation<ApiResponse<Screening>, ScreeningMutation>({
+      query: ({ id, movie_id, room_id, start_time, date }) => ({
         url: `screenings/${id}`,
         method: 'PUT',
-        body: formData,
+        body: {
+          movie_id,
+          room_id,
+          start_time,
+          date,
+        }
       }),
     }),
     deleteScreening: build.mutation<ApiResponse<null>, number>({

@@ -12,6 +12,7 @@ import {LoaderCircle} from "lucide-react";
 import {useAuth} from "@/hooks/use-auth";
 import {TicketType, useCreateBookingMutation, useGetBookingsQuery} from "@/app/userApi";
 import {useAppSelector} from "@/app/hooks";
+import {useDeleteScreeningMutation} from "@/app/adminApi";
 
 type Params = {
   day?: string
@@ -20,8 +21,8 @@ type Params = {
 }
 
 export default function ScreeningPage() {
-  const {isLoggedIn} = useAuth();
-  const { currentWeek } = useAppSelector(state => state.app);
+  const {isLoggedIn, isAdmin} = useAuth();
+  const {currentWeek} = useAppSelector(state => state.app);
   const [selectedSeats, setSelectedSeats] = useState<Booking[]>([]);
   const [studentTickets, setStudentTickets] = useState(0);
   const [adultTickets, setAdultTickets] = useState(0);
@@ -29,7 +30,8 @@ export default function ScreeningPage() {
   const [seatDiff, setSeatDiff] = useState(0);
 
   const [createBooking, {isLoading}] = useCreateBookingMutation();
-  const { refetch: bookingRefetch } = useGetBookingsQuery();
+  const {refetch: bookingRefetch} = useGetBookingsQuery();
+  const [deleteScreening] = useDeleteScreeningMutation();
 
   const {screening: screeningId, movie: movieId, day} = useParams<Params>();
 
@@ -65,7 +67,7 @@ export default function ScreeningPage() {
 
   const screening = movie?.screenings?.filter((s) => s.id.toString() === screeningId)?.[0];
 
-  if (!screening) {
+  if (!screening || !movieId || !screeningId) {
     return <h2>Screening not found</h2>
   }
 
@@ -225,8 +227,27 @@ export default function ScreeningPage() {
     </>
   )
 
+  const _deleteScreening = async (id: number) => {
+    try {
+      await deleteScreening(id).unwrap();
+      toast.success("Screening deleted successfully!");
+      refetch();
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
+      if (error?.data?.message) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
+        toast.error(error?.data?.message);
+      } else {
+        console.error(error);
+      }
+    }
+  }
+
   return (
     <div className="flex flex-col gap-4 transition-all">
+      {isAdmin && <Button onClick={() => _deleteScreening(screening.id)}>Delete screening</Button>}
       <Card className="bg-linear-to-bl from-card via-70% via-card to-primary/10">
         <CardHeader>
           <CardTitle>Tickets</CardTitle>
