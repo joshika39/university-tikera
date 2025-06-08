@@ -15,20 +15,20 @@ A fegyelmi vétség legsúlyosabb következménye a hallgató elbocsátása az e
 
 ## Pontozás
 
-- [ ] React használata (kötelező)
-- [ ] Redux használata (kötelező)
-- [ ] README.md fájl kitöltve
-- [ ] Moziműsor: A filmek és vetítések megfelelően jelennek meg az API-ból lekérve (2pt)
-- [ ] Moziműsor: Hetek között lépkedni tudunk, látjuk a dátumokat (2pt)
-- [ ] Felhasználókezelés: Regisztráció működik (1pt)
-- [ ] Felhasználókezelés: Bejelentkezés működik (1pt)
-- [ ] Navigáció: Navigációs sáv tartalma megfelelően változik a be- és kijelentkezésnek megfelelően, bejelentkezés után a felhasználó neve megjelenik a navigációs sávban (2pt)
+- [x] React használata (kötelező)
+- [x] Redux használata (kötelező)
+- [x] README.md fájl kitöltve
+- [x] Moziműsor: A filmek és vetítések megfelelően jelennek meg az API-ból lekérve (2pt)
+- [x] Moziműsor: Hetek között lépkedni tudunk, látjuk a dátumokat (2pt)
+- [x] Felhasználókezelés: Regisztráció működik (1pt)
+- [x] Felhasználókezelés: Bejelentkezés működik (1pt)
+- [x] Navigáció: Navigációs sáv tartalma megfelelően változik a be- és kijelentkezésnek megfelelően, bejelentkezés után a felhasználó neve megjelenik a navigációs sávban (2pt)
 - [ ] Navigáció: Navigációs sáv tartalma megfelelően változik a felhasználó 'role' attribútuma alapján, adminként megjelennek a releváns opciók (1pt)
-- [ ] Felhasználókezelés: Kijelentkezés működik (1pt)
-- [ ] Jegyfoglalás: Foglalás esetén a szerverről ellenőrizzük, hogy az adott hely még elérhető-e (2pt)
-- [ ] Jegyfoglalás: A felhasználó által vásárolt jegyek az adatbázisban mentésre kerülnek a REST API segítségével (2pt)
-- [ ] Jegyfoglalás: A felhasználó visszajelzést kap a sikeres/sikertelen foglalásról (1pt)
-- [ ] Foglalásaim oldal: A felhasználó foglalásai, és annak információ listázásra kerülnek (2pt)
+- [x] Felhasználókezelés: Kijelentkezés működik (1pt)
+- [x] Jegyfoglalás: Foglalás esetén a szerverről ellenőrizzük, hogy az adott hely még elérhető-e (2pt)
+- [x] Jegyfoglalás: A felhasználó által vásárolt jegyek az adatbázisban mentésre kerülnek a REST API segítségével (2pt)
+- [x] Jegyfoglalás: A felhasználó visszajelzést kap a sikeres/sikertelen foglalásról (1pt)
+- [x] Foglalásaim oldal: A felhasználó foglalásai, és annak információ listázásra kerülnek (2pt)
 - [ ] Admin funkciók: Film hozzáadása működik (kép nélkül) (2pt)
 - [ ] Admin funkciók: Vetítés hozzáadása működik (2pt)
 - [ ] Admin funkciók: Film szerkesztése működik (kép nélkül) (1pt)
@@ -40,9 +40,9 @@ A fegyelmi vétség legsúlyosabb következménye a hallgató elbocsátása az e
 Összesen: 30 pont (Minimum: 12 pont)
 
 ### Plusz feladatok (+5 pont)
-- [ ] Sötét/világos mód: Az oldalon tudunk váltani sötét/világos módra, ezt a teljes oldal kinézete leköveti (2pt)
+- [x] Sötét/világos mód: Az oldalon tudunk váltani sötét/világos módra, ezt a teljes oldal kinézete leköveti (2pt)
 - [ ] Modal komponens: Az admin felületen a vetítések hozzáadása és szerkesztése azonos oldalon, modal komponensben történik (1pt)
-- [ ] Toastok: Az alkalmazás toast üzenetekkel jelzi a következő műveleteket (2pt):
+- [x] Toastok: Az alkalmazás toast üzenetekkel jelzi a következő műveleteket (2pt):
   - Sikeres/sikertelen bejelentkezés
   - Sikeres kijelentkezés
   - Sikeres/sikertelen jegyfoglalás
