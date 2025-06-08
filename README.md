@@ -29,19 +29,20 @@ A fegyelmi vétség legsúlyosabb következménye a hallgató elbocsátása az e
 - [x] Jegyfoglalás: A felhasználó által vásárolt jegyek az adatbázisban mentésre kerülnek a REST API segítségével (2pt)
 - [x] Jegyfoglalás: A felhasználó visszajelzést kap a sikeres/sikertelen foglalásról (1pt)
 - [x] Foglalásaim oldal: A felhasználó foglalásai, és annak információ listázásra kerülnek (2pt)
-- [ ] Admin funkciók: Film hozzáadása működik (kép nélkül) (2pt)
-- [ ] Admin funkciók: Vetítés hozzáadása működik (2pt)
-- [ ] Admin funkciók: Film szerkesztése működik (kép nélkül) (1pt)
+- [x] Admin funkciók: Film hozzáadása működik (kép nélkül) (2pt)
+- [x] Admin funkciók: Vetítés hozzáadása működik (2pt)
+- [x] Admin funkciók: Film szerkesztése működik (kép nélkül) (1pt)
 - [ ] Admin funkciók: Vetítés szerkesztése működik (1pt)
-- [ ] Admin funkciók: Film és vetítés törlése működik (1pt)
-- [ ] Admin funkciók: Az admin visszajelzést kap a sikeres/sikertelen film/vetítés módosításokról (2pt)
-- [ ] Mobilbarát reszponzív megjelenés, mobilnézetben is jól használható az oldal (2pt)
+- [x] Admin funkciók: Film és vetítés törlése működik (1pt)
+- [x] Admin funkciók: Az admin visszajelzést kap a sikeres/sikertelen film/vetítés módosításokról (2pt)
+- [x] Mobilbarát reszponzív megjelenés, mobilnézetben is jól használható az oldal (2pt)
 
 Összesen: 30 pont (Minimum: 12 pont)
 
 ### Plusz feladatok (+5 pont)
+
 - [x] Sötét/világos mód: Az oldalon tudunk váltani sötét/világos módra, ezt a teljes oldal kinézete leköveti (2pt)
-- [ ] Modal komponens: Az admin felületen a vetítések hozzáadása és szerkesztése azonos oldalon, modal komponensben történik (1pt)
+- [x] Modal komponens: Az admin felületen a vetítések hozzáadása és szerkesztése azonos oldalon, modal komponensben történik (1pt)
 - [x] Toastok: Az alkalmazás toast üzenetekkel jelzi a következő műveleteket (2pt):
   - Sikeres/sikertelen bejelentkezés
   - Sikeres kijelentkezés
