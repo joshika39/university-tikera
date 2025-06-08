@@ -9,15 +9,18 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {useLoginMutation} from "@/app/authApi";
 import {toast} from "sonner";
+import {setUser} from "@/app/appSlice";
+import {useAppDispatch} from "@/app/hooks";
 
 const loginForm = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(5, "Password must be at least 6 characters"),
 });
 
 type LoginForm = z.infer<typeof loginForm>;
 
 export function LoginPage() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [login, {isLoading}] = useLoginMutation();
 
@@ -32,12 +35,13 @@ export function LoginPage() {
   const onSubmit = async (data: LoginForm) => {
     try {
       const user = await login(data).unwrap();
-      toast.success("Registration successful!");
+      toast.success("Login successful!");
       localStorage.setItem("user", JSON.stringify(user));
+      dispatch(setUser(user));
       navigate("/");
     } catch (error) {
-      console.error("Registration failed:", error);
-      toast.error("Registration failed. Please try again.");
+      console.error("Login failed:", error);
+      toast.error("Login failed. Please try again.");
     }
   };
 

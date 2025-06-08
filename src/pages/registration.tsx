@@ -9,6 +9,8 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {useRegisterMutation} from "@/app/authApi";
 import {toast} from "sonner";
+import {useAppDispatch} from "@/app/hooks";
+import {setUser} from "@/app/appSlice";
 
 const registerForm = z.object({
   name: z.string().min(1, "Name is required"),
@@ -22,6 +24,7 @@ const registerForm = z.object({
 type RegisterForm = z.infer<typeof registerForm>;
 
 export function RegisterPage() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [register, {isLoading}] = useRegisterMutation();
 
@@ -37,8 +40,9 @@ export function RegisterPage() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      await register(data).unwrap();
+      const user = await register(data).unwrap();
       toast.success("Registration successful!");
+      dispatch(setUser(user));
       navigate("/");
     } catch (error) {
       console.error("Registration failed:", error);
