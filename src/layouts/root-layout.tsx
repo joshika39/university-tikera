@@ -20,7 +20,7 @@ import {NavUser} from "@/components/nav-user";
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export const RootLayout = () => {
-  const {isLoggedIn, name, email} = useAuth();
+  const {isLoggedIn} = useAuth();
   const {pathname} = useLocation();
   const navigate = useNavigate();
   const {currentWeek} = useAppSelector((state) => state.app);
@@ -58,7 +58,7 @@ export const RootLayout = () => {
   };
 
   const authButtons = isLoggedIn ? (
-    <NavUser user={{name, email}}/>
+    <NavUser />
   ) : (
     <>
       <Link to="/login" className={buttonVariants({variant: "outline"})}>
